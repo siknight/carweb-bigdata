@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery.min.js"> </script>
+
+</head>
+<body>
+    <div>提示:请填本地路径(例如：F:\bb)或者hadoop路径(hdfs://hadoop102:9000/carbigdata)</div>
+    <input type="text" id="router" placeholder="请输入本地路径或者hdfs路径">
+    <span id="router_error" style="color: red"></span><br/>
+    <button id="executor">处理</button>
+    <script>
+        $("#executor").click(function () {
+            $("#router_error").html("");
+            var router= $("#router").val();
+            var flag=true;
+            if(router==""){
+                $("#router_error").html("地址为空");
+                flag=false;
+            }
+            if(flag){
+                $("#router_error").html("数据正在处理，请等待...");
+                $.ajax({
+                    url:"/toexecutor.do",
+                    type:"post",
+                    dataType:"json",
+                    data:{"position":router},
+                    success:function (result) {
+
+                        if (result==1){
+                            $("#router_error").html("恭喜你，处理成功");
+                        }
+                    },
+                    error:function () {
+                        alert("网络错误，请稍后再试...");
+                    }
+
+
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
